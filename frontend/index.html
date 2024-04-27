@@ -87,12 +87,13 @@
                 conn = new WebSocket("ws://" + document.location.host + "/ws");
 
                 conn.onmessage = function(evt) {
+                    console.log(evt);
                     const eventData = JSON.parse(evt.data);
 
                     const event = Object.assign(new Event, eventData);
                     
                     routeEvent(event);
-                    console.log(event)
+                    // console.log(event)
                 }
             } else {
                 alert("Websocket not supported");

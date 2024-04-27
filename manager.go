@@ -18,14 +18,18 @@ var (
 	}
 )
 
+
 var (
 	ErrEventNotSupported = errors.New("this event type is not supported")
 )
 
 type Manager struct {
 	clients ClientList
-	sync.RWMutex
 
+	// Using a syncMutex here to be able to lcok state before editing clients
+	// Could also use Channels to block
+	sync.RWMutex
+	// handlers are functions that are used to handle Events
 	handlers map[string]EventHandler
 }
 
@@ -34,20 +38,21 @@ func NewManager() *Manager {
 		clients:  make(ClientList),
 		handlers: make(map[string]EventHandler),
 	}
-
 	m.setupEventHandlers()
 	return m
 }
 
 func (m *Manager) setupEventHandlers() {
 	m.handlers[EventSendMessage] = func(e Event, c *Client) error {
-		fmt.Println("ssssssssssssss", e)
+		fmt.Println(e)
 		return nil
 	}
 }
 
 func (m *Manager) routeEvent(event Event, c *Client) error {
-	if handler, ok := m.handlers[event.Type]; !ok {
+	// Check if Handler is present in Map
+	if handler, ok := m.handlers[event.Type]; ok {
+		// Execute the handler and return any err
 		if err := handler(event, c); err != nil {
 			return err
 		}
