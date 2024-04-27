@@ -32,10 +32,19 @@
         var selectedChat  = "general";
 
         function changeChatroom() {
-            var newChat = document.getElementById("chatroom");
-            if(newChat != nil && newChat.value != selectedChat) {
-                console.log()
+            var newchat = document.getElementById("chatroom");
+            if(newchat != nil && newchat.value != selectedChat) {
+                console.log(newchat);
             }
+            return false;
+        }
+
+        function sendMessage() {
+            var newmessage = document.getElementById("message");
+            if(newmessage != nil && newmessage.value != selectedChat) {
+                console.log(newmessage);
+            }
+            return false;
         }
     </script>
 </body>
