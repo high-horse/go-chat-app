@@ -50,7 +50,32 @@
         window.onload =function() {
             document.getElementById("chatroom-selection").onsubmit = changeChatroom;
             document.getElementById("chatroom-message").onsubmit = sendMessage;
+
+            if(window["WebSocket"]) {
+                console.log("supports websocket");
+            } else {
+                alert("Websocket not supported");
+            }
         }
     </script>
+
+    <style type="text/css">
+
+        body {
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(66, 56, 56);
+        }
+
+        .center {
+            margin: auto;
+            width: 50%;
+            border: 3px solid green;
+            padding: 10px;
+        }
+    </style>
 </body>
 </html>
