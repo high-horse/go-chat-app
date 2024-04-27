@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
 </head>
 <body>
@@ -21,7 +22,7 @@
         <br>
 
         <form  id="chatroom-message">
-            <label for="messsage">Message</label>
+            <label for="message">Message</label>
             <input type="text" name="message" id="message"> <br><br>
             <input type="submit" value="Send message">
         </form>
@@ -33,16 +34,17 @@
 
         function changeChatroom() {
             var newchat = document.getElementById("chatroom");
-            if(newchat != nil && newchat.value != selectedChat) {
+            if(newchat != null && newchat.value != selectedChat) {
                 console.log(newchat);
             }
             return false;
         }
 
-        function sendMessage() {
+        function sendMessage(event) {
+            event.preventDefault();
             var newmessage = document.getElementById("message");
-            if(newmessage != nil) {
-                console.log(newmessage);
+            if(newmessage != null) {
+                conn.send(newmessage.value);
             }
             return false;
         }
@@ -53,7 +55,7 @@
 
             if(window["WebSocket"]) {
                 console.log("supports websocket");
-                conn =new WebSocket("ws://" + document.location.host + "/ws");
+                conn = new WebSocket("ws://" + document.location.host + "/ws");
             } else {
                 alert("Websocket not supported");
             }

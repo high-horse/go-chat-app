@@ -40,6 +40,10 @@ func (m *Manager) serveWs(w http.ResponseWriter, r *http.Request) {
 	client := NewClient(conn, m)
 
 	m.addClient(client)
+	
+
+	// start client processes
+	go client.readMessages()
 }
 
 func (m *Manager) addClient (client *Client) {
