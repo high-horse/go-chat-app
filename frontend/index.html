@@ -41,10 +41,15 @@
 
         function sendMessage() {
             var newmessage = document.getElementById("message");
-            if(newmessage != nil && newmessage.value != selectedChat) {
+            if(newmessage != nil) {
                 console.log(newmessage);
             }
             return false;
+        }
+
+        window.onload =function() {
+            document.getElementById("chatroom-selection").onsubmit = changeChatroom;
+            document.getElementById("chatroom-message").onsubmit = sendMessage;
         }
     </script>
 </body>
