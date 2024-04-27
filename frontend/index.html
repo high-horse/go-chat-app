@@ -6,6 +6,27 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>test</h1>
+    <div class="center">
+        <h1>Chat App</h1>
+        <h3 id="chat-header">Currently in cat: general</h3>
+
+        <form  id="chatroom-selection">
+            <label for="chatroom">Chatroom</label>
+            <input type="text" name="chatroom" id="chatroom"> <br> <br>
+            <input type="submit" value="Change chatroom">
+        </form>
+
+        <br>
+        <textarea name="messagearea" id="chatmessages" readonly cols="50" rows="4" placeholder="welcome tot theh chatroom"></textarea>
+        <br>
+
+        <form  id="chatroom-message">
+            <label for="messsage">Message</label>
+            <input type="text" name="message" id="message"> <br><br>
+            <input type="submit" value="Send message">
+        </form>
+
+    </div>
+
 </body>
 </html>
