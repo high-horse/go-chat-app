@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	println("starting server at port :8000")
 	setupAPI()
 
 	log.Fatal(http.ListenAndServe(":8000", nil))

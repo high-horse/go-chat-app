@@ -74,12 +74,14 @@ func (c *Client) readMessages() {
 
 // writeMessages is a process that listens for new messages to output to the Client
 func (c *Client) writeMessages() {
+	ticker := time.NewTicker(pingInterval)
+
 	defer func() {
+		ticker.Stop()
 		// Graceful close if this triggers a closing
 		c.manager.removeClient(c)
 	}()
 
-	ticker := time.NewTicker(pingInterval)
 
 	for {
 		select {
