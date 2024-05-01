@@ -1,1 +1,3 @@
 https://programmingpercy.tech/blog/mastering-websockets-with-go/
+
+bash gencert.bash
