@@ -49,19 +49,47 @@
             }
         }
 
+        class SendMessageEvent {
+            constructor(message, from) {
+                this.message =  message;
+                this.from = from;
+            }
+        }
+
+        class NewMessageEvent {
+            constructor(message, from, sent) {
+                this.message =  message;
+                this.from = from;
+                this.sent = sent;
+            }
+        }
+
         function routeEvent(event) {
             if (event.type === undefined) {
                 alert("no 'type' field in the event");
             }
             switch (event.type) {
                 case "new_message":
-                    console.log("new message");
+                    // console.log("new message");
+                    const messageEvent = Object.assign(new NewMessageEvent, event.payload)
+                    appendChatMessage(messageEvent)
                     break;
             
                 default:
                     alert("unsupported message type")
                     break;
             }
+        }
+
+        function appendChatMessage(messageEvent) {
+            var date = new Date(messageEvent.sent);
+            const formattedMsg = `${date.toLocaleString()}: ${messageEvent.message}`;
+
+            textarea = document.getElementById('chatmessages');
+
+            textarea.innerHTML = textarea.innerHTML + "\n" + formattedMsg
+            textarea.scrollTop = textarea.scrollHeight;
+
         }
 
         function sendEvent(eventName, payload ) {
@@ -82,7 +110,9 @@
             event.preventDefault();
             var newmessage = document.getElementById("message");
             if(newmessage != null) {
-                sendEvent("send_message", newmessage.value);
+                let outgoingEvent = new SendMessageEvent(newmessage.value, "party1")
+                sendEvent("send_message", outgoingEvent);
+                // sendEvent("send_message", newmessage.value);
             }
             return false;
         }
