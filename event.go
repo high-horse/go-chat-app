@@ -22,6 +22,7 @@ const (
 	// EventSendMessage is the event name for new chat messages sent
 	EventSendMessage = "send_message"
 	EventNewMessage = "new_message"
+	EventChangeRoom = "change_room"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -34,4 +35,8 @@ type SendMessageEvent struct {
 type NewMessageEvent struct {
 	SendMessageEvent
 	Sent  time.Time		`json:"sent"`
+}
+
+type ChangeRoomEvent struct {
+	Name string `json:"name"`
 }

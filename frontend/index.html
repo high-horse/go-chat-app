@@ -64,6 +64,30 @@
             }
         }
 
+        class ChangeChatRoomEvent {
+            constructor(name) {
+                this.name = name;
+            }
+        }
+
+        function changeChatroom(event) {
+            event.preventDefault();
+            var newChat = document.getElementById("chatroom");
+            if(newChat != null && newChat.value != selectedChat) {
+                selectedChat = newChat.value;
+                console.log(selectedChat, newChat.value);
+                header = document.getElementById('chat-header').innerHTML = "Currently in chatroom: " + selectedChat;
+
+                let changeEvent = new ChangeChatRoomEvent(selectedChat);
+
+                sendEvent("change_room", changeEvent);
+
+                textarea = document.getElementById('chatmessages');
+                textarea.innerHTML = `You changed room into: ${selectedChat}`
+            }  
+            return false; 
+        }
+
         function routeEvent(event) {
             if (event.type === undefined) {
                 alert("no 'type' field in the event");
@@ -98,13 +122,13 @@
             conn.send(JSON.stringify(event));
         }
 
-        function changeChatroom() {
-            var newchat = document.getElementById("chatroom");
-            if(newchat != null && newchat.value != selectedChat) {
-                console.log(newchat);
-            }
-            return false;
-        }
+        // function changeChatroom() {
+        //     var newchat = document.getElementById("chatroom");
+        //     if(newchat != null && newchat.value != selectedChat) {
+        //         console.log(newchat);
+        //     }
+        //     return false;
+        // }
 
         function sendMessage(event) {
             event.preventDefault();
