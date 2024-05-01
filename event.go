@@ -1,6 +1,9 @@
 package main
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 // Event is the Messages sent over the websocket
 // Used to differ between different actions
@@ -18,6 +21,7 @@ type EventHandler func(event Event, c *Client) error
 const (
 	// EventSendMessage is the event name for new chat messages sent
 	EventSendMessage = "send_message"
+	EventNewMessage = "new_message"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -25,4 +29,9 @@ const (
 type SendMessageEvent struct {
 	Message string `json:"message"`
 	From    string `json:"from"`
+}
+
+type NewMessageEvent struct {
+	SendMessageEvent
+	Sent  time.Time		`json:"sent"`
 }

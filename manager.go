@@ -50,10 +50,37 @@ func NewManager(ctx context.Context) *Manager {
 }
 
 func (m *Manager) setupEventHandlers() {
-	m.handlers[EventSendMessage] = func(e Event, c *Client) error {
-		fmt.Println(e)
-		return nil
+	m.handlers[EventSendMessage] = SendMessage
+}
+
+func SendMessage (event Event, c *Client) error {
+	fmt.Println(event)
+	var chatEvent SendMessageEvent
+
+	if err := json.Unmarshal(event.Payload, &chatEvent); err != nil {
+		return fmt.Errorf("bad payload in request: %v", err)
 	}
+
+	var broadMessage NewMessageEvent
+
+	broadMessage.Sent = time.Now()
+	broadMessage.Message = chatEvent.Message
+	broadMessage.From = chatEvent.From
+
+	data, err := json.Marshal(broadMessage)
+	if err != nil {
+		return fmt.Errorf("failed to marshell broadcast message: %v", err)
+	}
+
+	outgoingEvent := Event {
+		Payload: data,
+		Type: EventNewMessage,
+	}
+
+	for clinet := range c.manager.clients {
+		clinet.egress <- outgoingEvent
+	}
+	return nil
 }
 
 func (m *Manager) routeEvent(event Event, c *Client) error {
