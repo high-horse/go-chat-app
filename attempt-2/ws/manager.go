@@ -13,10 +13,6 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
-	// websocketUpgrader = websocket.Upgrader{
-	// 	ReadBUddderSize: 1024,
-	// 	WriteBuffersize: 1024,
-	// }
 )
 
 type Manager struct {
@@ -38,7 +34,6 @@ func (m *Manager) ServerWS(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	// println(*conn)
 	conn.Close()
 }
 
