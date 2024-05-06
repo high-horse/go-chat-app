@@ -26,8 +26,8 @@ type Manager struct {
 }
 
 func NewManager() *Manager {
-	m :=  &Manager{
-		clients: make(ClientList),
+	m := &Manager{
+		clients:  make(ClientList),
 		handlers: make(map[string]EventHandler),
 	}
 	m.setupEventHandlers()
@@ -41,12 +41,11 @@ func (m *Manager) setupEventHandlers() {
 	}
 }
 
-
-func (m *Manager) routeEvent(event Event, client *Client) error {
-	if handler, ok := m.handlers[event.Type]; !ok {
-		if err := handler(event, client); err != nil {
+func (m *Manager) routeEvent(event Event, c *Client) error {
+	if handler, ok := m.handlers[event.Type]; ok {
+		if err := handler(event, c); err != nil {
 			return err
-		} 
+		}
 		return nil
 	} else {
 		return ErrEventNotSupported
@@ -61,7 +60,7 @@ func (m *Manager) ServerWS(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	
+
 	client := NewClient(conn, m)
 	m.addClient(client)
 
