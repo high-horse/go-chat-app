@@ -34,7 +34,30 @@
     <script>
         const $ = document.querySelector.bind(document);
         var selected_chat = "general"; 
-        // connent
+        
+        class Event {
+            constructor(type, payload) {
+                this.type = type;
+                this.payload  = payload;  
+            }
+        }
+        
+        function routeEvent(event) {
+            if(event.type === undefined) {
+                alert("no 'type' field in event")
+            }
+            switch (event.type ) {
+                case "new_message": {
+                    console.log(new message);
+                    break;
+                } 
+                default : {
+                    alert("unsupported message type");
+                    break;
+                }
+            }
+
+        }
 
         function changeChatroom() {
             var newchat = $("#chatroom");
@@ -47,10 +70,16 @@
         function sendMessage() {
             var newmessage = $("#message");
             if(newmessage != null ) {
-                console.log(newmessage.value);
-                conn.send(newmessage.value)
+                send_message("new_message", newmessage.value);
+                console.log(newmessage.value)
             }
             return false;
+        }
+
+        function send_message(eventName, payload) {
+            const event = new Event(eventName, payload)
+
+            conn.send(JSON.stringify(event))
         }
 
         window.onload = function () {
@@ -60,6 +89,15 @@
             if(window["WebSocket"]) {
                 console.log("supports websocket");
                 conn = new WebSocket("ws://"+ document.location.host + "/ws");
+
+                conn.onmessage = function (evt) {
+                    console.log(evt);
+                    const eventData = JSON.parse(evt.data);
+                    const event = Object.assign(new Event, eventData);
+
+                    routeEvent(event);
+
+                }
             } else {
                 alert("Websocket not selected by the brpwser")
             }

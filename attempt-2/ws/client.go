@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type CLientList map[*Client]bool
+type ClientList map[*Client]bool
 
 type Client struct {
 	connection *websocket.Conn
