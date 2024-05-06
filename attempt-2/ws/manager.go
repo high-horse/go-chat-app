@@ -34,24 +34,27 @@ func (m *Manager) ServerWS(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	conn.Close()
+	
+	client := NewClient(conn, m)
+	m.addClient(client)
+
+	go client.readMessages()
+	go client.writeMessage()
 }
 
-func (m *Manager) addClient(client Client) {
-	m.Lock()
-
-	defer m.Unlock()
-	m.clients[&client] = true
-
-
-}
-
-func (m *Manager) removeClient(client Client) {
+func (m *Manager) addClient(client *Client) {
 	m.Lock()
 	defer m.Unlock()
 
-	if _, ok := m.clients[&client]; ok {
+	m.clients[client] = true
+}
+
+func (m *Manager) removeClient(client *Client) {
+	m.Lock()
+	defer m.Unlock()
+
+	if _, ok := m.clients[client]; ok {
 		client.connection.Close()
-		delete(m.clients, &client)
+		delete(m.clients, client)
 	}
 }

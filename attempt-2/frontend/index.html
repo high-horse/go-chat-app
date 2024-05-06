@@ -47,7 +47,8 @@
         function sendMessage() {
             var newmessage = $("#message");
             if(newmessage != null ) {
-                console.log(newmessage);
+                console.log(newmessage.value);
+                conn.send(newmessage.value)
             }
             return false;
         }
