@@ -42,7 +42,10 @@ func (m *Manager) setupEventHandlers() {
 }
 
 func (m *Manager) routeEvent(event Event, c *Client) error {
+	// Check if Handler is present in Map
 	if handler, ok := m.handlers[event.Type]; ok {
+		// Execute the handler and return any err
+		// println(&handler)
 		if err := handler(event, c); err != nil {
 			return err
 		}
