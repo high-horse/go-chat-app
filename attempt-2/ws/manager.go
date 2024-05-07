@@ -12,12 +12,24 @@ import (
 
 var (
 	websocketUpgrader = websocket.Upgrader{
+		CheckOrigin: checkOrigin,
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
 
 	ErrEventNotSupported = errors.New("Event type not supported.")
 )
+
+func checkOrigin(r *http.Request) bool {
+	origin := r.Header.Get("Origin")
+
+	switch origin {
+	case "http://localhost:3000":
+		return true
+	default:
+		return false
+	}
+}
 
 type Manager struct {
 	clients ClientList

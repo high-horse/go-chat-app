@@ -11,8 +11,8 @@ import (
 type ClientList map[*Client]bool
 
 var (
-	pongWait = 10 * time.Second
-	pingInterval = (pongWait *9) / 10
+	pongWait     = 10 * time.Second
+	pingInterval = (pongWait * 9) / 10
 )
 
 type Client struct {
@@ -35,12 +35,13 @@ func (client *Client) readMessages() {
 		client.manager.removeClient(client)
 	}()
 
+	client.connection.SetReadLimit(512)
+
 	if err := client.connection.SetReadDeadline(time.Now().Add(pongWait)); err != nil {
 		log.Panicln(err)
 		return
 	}
 
-	// client.connection.SetPongHandler(client.pongHandler)
 	client.connection.SetPongHandler(client.pongHandler)
 
 	for {
@@ -66,7 +67,7 @@ func (client *Client) readMessages() {
 	}
 }
 
-func (client *Client) pongHandler (pongMsg string) error {
+func (client *Client) pongHandler(pongMsg string) error {
 	log.Println("pong")
 	return client.connection.SetReadDeadline(time.Now().Add(pongWait))
 }
