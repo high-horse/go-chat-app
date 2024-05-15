@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="container" id="district">
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Kathmandu"> <label class="label" for="Kathmandu">Kathmandu</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Bhaktapur"> <label class="label" for="Bhaktapur">Bhaktapur</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Lalitpur"> <label class="label" for="Lalitpur">Lalitpur</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Syangja"> <label class="label" for="Syangja">Syangja</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Kavre"> <label class="label" for="Kavre">Kavre</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Dhading"> <label class="label" for="Dhading">Dhading</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Banke"> <label class="label" for="Banke">Banke</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Bardiya"> <label class="label" for="Bardiya">Bardiya</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Chitwan"> <label class="label" for="Chitwan">Chitwan</label> </div>
+    </div>
+<hr>
+    <div class="container" id="locations">
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="New-York"> <label class="label" for="New York">New York</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Los-Angeles"> <label class="label" for="Los Angeles">Los Angeles</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Chicago"> <label class="label" for="Chicago">Chicago</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Houston"> <label class="label" for="Houston">Houston</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Phoenix"> <label class="label" for="Phoenix">Phoenix</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Philadelphia"> <label class="label" for="Philadelphia">Philadelphia</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="San-Antonio"> <label class="label" for="San Antonio">San Antonio</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="San-Diego"> <label class="label" for="San Diego">San Diego</label> </div>
+        <div class="accompainment-group"> <input type="checkbox" class="checkbox" value="Dallas"> <label class="label" for="Dallas">Dallas</label> </div>
+    </div>
+
+
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {   
+            const $ = document.querySelector.bind(document); 
+
+            // $(".container").addEventListener('change', function(event) {
+            //     const value = event.target.value;
+            //     console.log(event.target);
+            //     const key =    event.target.parentNode.parentNode.id;
+            //     console.log(key);
+            //     const checked = event.target.checked;
+            //     updateUrl(key, value, checked);
+            // });
+            document.querySelectorAll(".container").forEach(container => {
+                container.addEventListener('change', function(event) {
+                    const value = event.target.value;
+                    const key = container.id;
+                    const checked = event.target.checked;
+                    updateUrl(key, value, checked);
+                });
+            });
+
+            function updateUrl(key, value, add) {
+                let pathname = location.pathname;
+
+                // Extract the current key-value pairs from the pathname
+                const regex = new RegExp(`${key}=([^/]+)`);
+                const match = pathname.match(regex);
+
+                if (match) {
+                    // If key exists, update the value by adding or removing the new one
+                    let currentValues = match[1].split(',');
+                    if (add) {
+                        if (!currentValues.includes(value)) {
+                            currentValues.push(value);
+                        }
+                    } else {
+                        currentValues = currentValues.filter(val => val !== value);
+                    }
+
+                    if (currentValues.length > 0) {
+                        pathname = pathname.replace(regex, `${key}=${currentValues.join(',')}`);
+                    } else {
+                        // Remove the key if no values are left
+                        pathname = pathname.replace(regex, '');
+                        pathname = pathname.replace(/\/$/, ''); // Remove trailing slash if any
+                    }
+                } else if (add) {
+                    // If key does not exist, append the new key-value pair
+                    pathname += `/${key}=${value}`;
+                }
+
+                // Ensure no double slashes in the pathname
+                pathname = pathname.replace(/\/{2,}/g, '/');
+
+                const newUrl = location.protocol + '//' + location.host + pathname;
+                console.log(newUrl);
+                window.history.replaceState({}, 'nextTitle', newUrl);
+            }
+        });
+    </script>
+
+
+    
+</body>
+</html>
