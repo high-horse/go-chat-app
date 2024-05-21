@@ -34,6 +34,9 @@
 
     <script>
         window.addEventListener("DOMContentLoaded", function() {   
+
+            init_Page() ;
+
             const $ = document.querySelector.bind(document); 
 
             // $(".container").addEventListener('change', function(event) {
@@ -91,6 +94,47 @@
                 window.history.replaceState({}, 'nextTitle', newUrl);
             }
         });
+
+
+        function init_Page() {
+            const URL = 'http://localhost:8080/';
+            const url = window.location;
+            const url_str = url.toString();;
+            // const url = "http://localhost:8080/district=Kathmandu,Lalitpur,Kavre,Banke,Bardiya/locations=New-York,Los-Angeles,Chicago,Houston,Phoenix,Philadelphia,San-Antonio";
+
+
+            console.log(typeof URL);
+            console.log(typeof url_str, url_str);
+            let remaining_url =stringSubtract(url_str, URL);
+            let hashMap = createHashMap(remaining_url);
+
+
+            // let added_path = stringSubtract(url, URL) ; 
+
+            console.log(hashMap);
+        }
+
+
+        function stringSubtract(a, b) {
+            if (a.startsWith(b)) {
+                return a.slice(b.length);
+            }
+            return a;
+        }
+
+        function createHashMap(str) {
+            let hashMap = {};
+            let pairs = str.split('/');
+
+            pairs.forEach(pair => {
+                let [key, values] = pair.split('=');
+                hashMap[key] = values.split(',');
+            });
+
+            return hashMap;
+        }
+
+        
     </script>
 
 
